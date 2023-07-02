@@ -29,6 +29,11 @@ export const setupCamera = async (stream: MediaStream) => {
   video.onloadedmetadata = () => {
     video.play();
   };
+  video.onended = () => {
+    if (!$stream) return;
+
+    $stream.getVideoTracks().forEach((track) => track.stop());
+  };
 };
 
 export const updateCameraStatus = async (stream: MediaStream) => {
