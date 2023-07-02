@@ -9,6 +9,9 @@ export const init = async () => {
     getVideoDevices();
   } catch (e) {
     console.error('navigator.getUserMedia error:', e);
+    document.querySelector('.webcamStatus')!.innerHTML = `
+      <div>Kameraya izin verilmedi veya desteklenmiyor.</div>
+    `;
   }
 };
 
@@ -32,9 +35,13 @@ export const updateCameraStatus = async (stream: MediaStream) => {
   try {
     const isEnabled = stream.getVideoTracks().some((t) => t.enabled);
     const isConnected = stream.getVideoTracks().some((t) => t.readyState === 'live');
+    // A stream is considered active if at least one of its MediaStreamTrack
+    // does not have its property MediaStreamTrack.readyState set to ended.
+    // Once every track has ended, the stream's active property becomes false.
+    const isActive = stream.active;
     document.querySelector('.webcamStatus')!.innerHTML = `
       <div>Kamera bağlandı mı: ${getBoolText(isConnected)}</div>
-      <div>Stream aktif mi: ${getBoolText(stream.active)}</div>
+      <div>Stream aktif mi: ${getBoolText(isActive)}</div>
       <div>Stream'ı Render etme izni var mı: ${getBoolText(isEnabled)}</div>
     `;
   } catch (e) {

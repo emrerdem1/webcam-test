@@ -38,6 +38,11 @@ body {
   text-align: center;
 }
 
+#webcam {
+  height: 480px;
+  width: 640px;
+}
+
 button {
   border-radius: 8px;
   border: 1px solid transparent;
